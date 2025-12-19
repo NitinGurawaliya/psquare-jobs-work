@@ -12,7 +12,8 @@ export function Companies() {
     let cancelled = false;
     apiFetch('/companies')
       .then((d) => {
-        if (!cancelled) setCompanies(d.companies);
+        // Backend returns { success, message, data: companies[] }
+        if (!cancelled) setCompanies(d.data || []);
       })
       .catch((e) => {
         if (!cancelled) setError(e.message);

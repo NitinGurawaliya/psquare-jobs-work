@@ -3,7 +3,7 @@ import { Container } from './Container';
 import { useAuth } from '../context/AuthContext';
 
 export function Navbar() {
-  const { isAuthed, isAdmin, user, logout } = useAuth();
+  const { isAuthed, user, logout } = useAuth();
 
   return (
     <div className="border-b border-slate-900 bg-slate-950/60 backdrop-blur">
@@ -32,11 +32,9 @@ export function Navbar() {
                 <Link className="text-sm text-slate-200 hover:text-white" to="/dashboard">
                   Dashboard
                 </Link>
-                {isAdmin ? (
-                  <Link className="text-sm text-slate-200 hover:text-white" to="/admin/companies">
-                    Admin
-                  </Link>
-                ) : null}
+                <Link className="text-sm text-slate-200 hover:text-white" to="/admin/companies">
+                  Manage
+                </Link>
                 <div className="hidden text-sm text-slate-400 sm:block">{user?.email}</div>
                 <button
                   onClick={logout}

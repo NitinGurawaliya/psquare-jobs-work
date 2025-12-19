@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext';
 
 export function CompanyJobs() {
   const { id } = useParams();
-  const { isAdmin } = useAuth();
+  const { isAuthed } = useAuth();
 
   const [company, setCompany] = useState(null);
   const [jobs, setJobs] = useState([]);
@@ -21,12 +21,13 @@ export function CompanyJobs() {
   const [salary, setSalary] = useState('');
   const [description, setDescription] = useState('');
 
-  const canCreate = useMemo(() => isAdmin, [isAdmin]);
+  const canCreate = useMemo(() => isAuthed, [isAuthed]);
 
   async function load() {
     const [c, j] = await Promise.all([apiFetch(`/companies/${id}`), apiFetch(`/companies/${id}/jobs`)]);
-    setCompany(c.company);
-    setJobs(j.jobs);
+    // Backend returns { success, message, data: company/jobs }
+    setCompany(c.data || null);
+    setJobs(j.data || []);
   }
 
   useEffect(() => {
@@ -36,8 +37,9 @@ export function CompanyJobs() {
       try {
         const [c, j] = await Promise.all([apiFetch(`/companies/${id}`), apiFetch(`/companies/${id}/jobs`)]);
         if (cancelled) return;
-        setCompany(c.company);
-        setJobs(j.jobs);
+        // Backend returns { success, message, data: company/jobs }
+        setCompany(c.data || null);
+        setJobs(j.data || []);
       } catch (e) {
         if (cancelled) return;
         setError(e.message);
@@ -115,7 +117,7 @@ export function CompanyJobs() {
                         {j.location || '—'} · {j.type || '—'} · {j.salary || '—'}
                       </div>
                     </div>
-                    {isAdmin ? (
+                    {isAuthed ? (
                       <Button variant="danger" type="button" onClick={() => deleteJob(j._id)}>
                         Delete
                       </Button>
@@ -124,7 +126,7 @@ export function CompanyJobs() {
 
                   {j.description ? <div className="mt-3 text-sm text-slate-300">{j.description}</div> : null}
 
-                  {isAdmin ? (
+                  {isAuthed ? (
                     <div className="mt-4 grid gap-2">
                       <div className="text-xs text-slate-400">Quick edit</div>
                       <div className="grid gap-2 sm:grid-cols-2">
@@ -166,7 +168,7 @@ export function CompanyJobs() {
           <Card>
             <div className="font-semibold">New Job</div>
             {!canCreate ? (
-              <div className="mt-3 text-sm text-slate-400">Admin login required to add jobs.</div>
+              <div className="mt-3 text-sm text-slate-400">Please login to add jobs.</div>
             ) : (
               <form className="mt-4 space-y-3" onSubmit={createJob}>
                 <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />

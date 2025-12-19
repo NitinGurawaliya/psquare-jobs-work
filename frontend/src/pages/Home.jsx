@@ -37,7 +37,7 @@ export function Home() {
           </Card>
           <Card>
             <div className="font-semibold">3) Login</div>
-            <div className="mt-2 text-sm text-slate-300">JWT token issued → Dashboard / Admin pages.</div>
+            <div className="mt-2 text-sm text-slate-300">JWT token issued → Dashboard / Manage companies & jobs.</div>
           </Card>
         </div>
       </div>

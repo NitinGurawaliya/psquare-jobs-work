@@ -9,7 +9,6 @@ import { Login } from './pages/Login';
 import { SetPassword } from './pages/SetPassword';
 import { Signup } from './pages/Signup';
 import { VerifyOtp } from './pages/VerifyOtp';
-import { AdminRoute } from './routes/AdminRoute';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 
 export default function App() {
@@ -39,9 +38,9 @@ export default function App() {
         <Route
           path="/admin/companies"
           element={
-            <AdminRoute>
+            <ProtectedRoute>
               <AdminCompanies />
-            </AdminRoute>
+            </ProtectedRoute>
           }
         />
 

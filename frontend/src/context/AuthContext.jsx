@@ -23,7 +23,8 @@ export function AuthProvider({ children }) {
           return;
         }
         const data = await apiFetch('/auth/me', { token });
-        if (!cancelled) setUser(data.user);
+        // Backend returns { success, message, data: { user } }
+        if (!cancelled) setUser(data.data?.user || data.user);
       } catch {
         if (!cancelled) {
           setUser(null);
@@ -48,11 +49,13 @@ export function AuthProvider({ children }) {
       user,
       loading,
       isAuthed: Boolean(token),
-      isAdmin: user?.role === 'admin',
+      // Admin role removed - simplified structure
+      isAdmin: false,
       async login(email, password) {
         const data = await apiFetch('/auth/login', { method: 'POST', body: { email, password } });
-        setToken(data.token);
-        setUser(data.user);
+        // Backend returns { success, message, data: { token, user } }
+        setToken(data.data?.token || data.token);
+        setUser(data.data?.user || data.user);
       },
       logout() {
         setUser(null);

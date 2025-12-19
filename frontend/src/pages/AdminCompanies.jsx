@@ -16,7 +16,8 @@ export function AdminCompanies() {
 
   async function load() {
     const d = await apiFetch('/companies');
-    setCompanies(d.companies);
+    // Backend returns { success, message, data: companies[] }
+    setCompanies(d.data || []);
   }
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export function AdminCompanies() {
   return (
     <Container>
       <div className="py-8">
-        <div className="text-2xl font-bold">Admin Dashboard</div>
+        <div className="text-2xl font-bold">Manage Companies</div>
         <div className="mt-1 text-slate-300">Create and manage companies + jobs.</div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">

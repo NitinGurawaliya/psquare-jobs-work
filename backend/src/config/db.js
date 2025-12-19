@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
 
 async function connectDB() {
-  const uri = process.env.MONGO_URI;
-  if (!uri) throw new Error('MONGO_URI is required');
-
-  mongoose.set('strictQuery', true);
-  await mongoose.connect(uri);
-  console.log('MongoDB connected');
+  try {
+    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/jobbank';
+    
+    await mongoose.connect(mongoUri);
+    console.log('MongoDB connected');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    throw error;
+  }
 }
 
 module.exports = { connectDB };
